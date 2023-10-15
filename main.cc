@@ -9,6 +9,7 @@
 #include <string.h>
 
 #include <algorithm>
+#include <chrono>
 #include <exception>
 #include <fstream>
 #include <iostream>
@@ -28,11 +29,22 @@ using namespace std;
 #define debug(a) cout << __FILE__ << ':' << __LINE__ << ": " << __func__ << ": " << #a << ": " << (a) << '\n'
 #endif
 
+void test(string program) {
+	auto start = chrono::high_resolution_clock::now();
+	auto cmd = program + " < data.tsv";
+#ifndef _WIN32
+	cmd = "./" + cmd;
+#endif
+	if (system(cmd.data()))
+		throw runtime_error(program + " failed");
+	auto stop = chrono::high_resolution_clock::now();
+	auto duration = chrono::duration_cast<chrono::milliseconds>(stop - start);
+	cout << program << '\t' << duration.count() << '\n';
+}
+
 int main(int argc, char** argv) {
 	try {
-		ofstream os("data.tsv", ios::binary);
-		for (size_t i = 0; i < 10000000; ++i)
-			os << i << '\t' << i << '\n';
+		test("test-getchar");
 		return 0;
 	} catch (exception& e) {
 		cerr << e.what() << '\n';

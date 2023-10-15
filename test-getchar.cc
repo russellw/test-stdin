@@ -30,9 +30,12 @@ using namespace std;
 
 int main(int argc, char** argv) {
 	try {
-		ofstream os("data.tsv", ios::binary);
-		for (size_t i = 0; i < 10000000; ++i)
-			os << i << '\t' << i << '\n';
+		string s;
+		int c;
+		while ((c = getchar()) >= 0)
+			s += (char)c;
+		if (s.size() != 157777780)
+			throw runtime_error(to_string(s.size()));
 		return 0;
 	} catch (exception& e) {
 		cerr << e.what() << '\n';
